@@ -22,11 +22,17 @@ func main() {
 		MaxReconnects: 3,
 	}
 
-	_, err := tarantool.Connect(server, opts)
+	client, err := tarantool.Connect(server, opts)
 	if err != nil {
 		log.Fatalf("Failed to connect: %s", err.Error())
 	}
 	log.Println("Connected to tarantool")
+
+	resp, err := client.Select("recipes", "primary", 0, 1, tarantool.IterEq, []interface{}{uint(1)})
+	log.Println("Select")
+	log.Println("Error", err)
+	log.Println("Code", resp.Code)
+	log.Println("Data", resp.Data)
 
 	http.HandleFunc("/", handler)
 	log.Fatalln(http.ListenAndServe(":80", nil))
