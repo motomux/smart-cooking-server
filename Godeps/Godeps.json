@@ -1,0 +1,22 @@
+{
+	"ImportPath": "github.com/motomux/smart-cooking-server",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v74",
+	"Deps": [
+		{
+			"ImportPath": "github.com/tarantool/go-tarantool",
+			"Comment": "alpha-59-g66443b1",
+			"Rev": "66443b186269cd0bb786aa03e7074e28d74ed659"
+		},
+		{
+			"ImportPath": "gopkg.in/vmihailenco/msgpack.v2",
+			"Comment": "v2.7.3",
+			"Rev": "38f3708c44f1402aeb2f137dd9a9dfb12bae2204"
+		},
+		{
+			"ImportPath": "gopkg.in/vmihailenco/msgpack.v2/codes",
+			"Comment": "v2.7.3",
+			"Rev": "38f3708c44f1402aeb2f137dd9a9dfb12bae2204"
+		}
+	]
+}
