@@ -1,0 +1,41 @@
+box: golang:1.7
+
+initial-build:
+  steps:
+
+build-go:
+
+  steps:
+    - setup-go-workspace
+
+    - install-packages:
+        packages: libsasl2-dev
+
+    - script:
+        name: go build
+        code: |
+          CGO_ENABLED=0 go  build -a -ldflags '-s' -installsuffix cgo -o ./app ./
+
+    - script:
+        name: copy binary
+        code: cp app $WERCKER_OUTPUT_DIR
+
+push-scratch:
+
+  steps:
+    - internal/docker-scratch-push:
+        username: _json_key
+        password: $GCR_JSON_KEY_FILE
+        repository: $DOCKER_REPOSITORY
+        registry: $DOCKER_REGISTRY
+        tag: $WERCKER_GIT_COMMIT
+
+deploy-k8s:
+
+  steps:
+    - kubectl:
+      server: $KUBERNETES_MASTER
+      username: $KUBERNETES_USERNAME
+      password: $KUBERNETES_PASSWORD
+      insecure-skip-tls-verify: true
+      command: set image  deployment/$K8S_DEPLOYMENT_NAME $K8S_DEPLOYMENT_NAME=$DOCKER_REPOSITORY:$WERCKER_GIT_COMMIT
