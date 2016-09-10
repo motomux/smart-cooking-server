@@ -22,7 +22,7 @@ func main() {
 		MaxReconnects: 3,
 	}
 
-	client, err := tarantool.Connect(server, opts)
+	_, err := tarantool.Connect(server, opts)
 	if err != nil {
 		log.Fatalf("Failed to connect: %s", err.Error())
 	}
