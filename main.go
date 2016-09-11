@@ -1,39 +1,39 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/motomux/smart-cooking-server/handler"
 	tarantool "github.com/tarantool/go-tarantool"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, This is smart cooking server!")
-}
-
 func main() {
+	port := flag.String("port", "80", "port of server")
+	db := flag.String("db", "smart-cooking-db:3301", "host of db server")
+	flag.Parse()
 
-	server := "smart-cooking-db:3301"
 	opts := tarantool.Opts{
 		Timeout:       500 * time.Millisecond,
 		Reconnect:     1 * time.Second,
 		MaxReconnects: 3,
 	}
 
-	client, err := tarantool.Connect(server, opts)
+	client, err := tarantool.Connect(*db, opts)
 	if err != nil {
-		log.Fatalf("Failed to connect: %s", err.Error())
+		log.Fatalf("Failed to connect: %s, %s", err.Error(), *db)
 	}
 	log.Println("Connected to tarantool")
 
-	resp, err := client.Select("recipes", "primary", 0, 1, tarantool.IterEq, []interface{}{uint(1)})
-	log.Println("Select")
-	log.Println("Error", err)
-	log.Println("Code", resp.Code)
-	log.Println("Data", resp.Data)
+	env := &handler.Env{
+		Client: client,
+	}
+	// Handler
+	mux := handler.NewHandler(env)
 
-	http.HandleFunc("/", handler)
-	log.Fatalln(http.ListenAndServe(":80", nil))
+	// Run server
+	log.Println("Starting web server on", port)
+	log.Fatalln(http.ListenAndServe(":"+*port, mux))
 }
