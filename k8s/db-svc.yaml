@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: smart-cooking-db
+  labels:
+    run: smart-cooking-db
+spec:
+  ports:
+  - port: 3301
+    targetPort: 3301
+    protocol: TCP
+  selector:
+    run: smart-cooking-db

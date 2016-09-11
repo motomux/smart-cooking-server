@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: smart-cooking-api
+  labels:
+    run: smart-cooking-api
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: smart-cooking-api
+    spec:
+      imagePullSecrets:
+      - name: myregistrykey
+      containers:
+      - name: smart-cooking-api
+        image: gcr.io/api-world-2016/smart-cooking-api:latest
+        imagePullPolicy: Always
+        command: ["./app"]
+        ports:
+          - name: http
+            containerPort: 80
