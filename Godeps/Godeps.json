@@ -4,6 +4,11 @@
 	"GodepVersion": "v74",
 	"Deps": [
 		{
+			"ImportPath": "github.com/julienschmidt/httprouter",
+			"Comment": "v1.1-34-gd8ff598",
+			"Rev": "d8ff598a019f2c7bad0980917a588193cf26666e"
+		},
+		{
 			"ImportPath": "github.com/tarantool/go-tarantool",
 			"Comment": "alpha-59-g66443b1",
 			"Rev": "66443b186269cd0bb786aa03e7074e28d74ed659"
